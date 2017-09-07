@@ -1,31 +1,39 @@
 package com.myutil.pio;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.hssf.usermodel.HSSFDataValidation;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.eventusermodel.XSSFReader;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class MainTest {
 
-	public static void main(String[] args) throws IOException {
-		HSSFWorkbook wb = new HSSFWorkbook();// excel文件对象
-		HSSFSheet sheetlist = wb.createSheet("sheetlist");// 工作表对象
-
-		FileOutputStream out = new FileOutputStream("d:\\success.xls");
-		String[] textlist = { "列表1", "列表2", "列表3", "列表4", "列表5" };
-
-		sheetlist = setHSSFValidation(sheetlist, textlist, 0, 500, 0, 0);// 第一列的前501行都设置为选择列表形式.
-		sheetlist = setHSSFValidation(sheetlist, textlist, 0, 500, 1, 1);// 第一列的前501行都设置为选择列表形式.
-		// sheetlist = setHSSFPrompt(sheetlist, "promt Title", "prompt Content",
-		// 0, 500, 1, 1);// 第二列的前501行都设置提示.
-		
-		
-		wb.write(out);
-		out.close();
+	public static void main(String[] args) throws IOException, Exception {
+		File file = new File("d:/mytest.xlsx");
+		//long star = System.currentTimeMillis();
+		//System.out.println("-----------------"+star);
+		SheetDatasHandler handler = new SheetDatasHandler();
+		UtilPoi.read(file.toPath(),handler);
+		List<Object> sheetDatas = handler.getSheetDatas();
+		//long end = System.currentTimeMillis();
+		//System.out.println("-----------------"+end);
+		//System.out.println(end-star);
+		//System.out.println(sheetDatas.size());
 	}
 
 	/**
